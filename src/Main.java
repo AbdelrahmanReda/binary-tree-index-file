@@ -37,6 +37,11 @@ public class Main {
             e.printStackTrace();
         }
     }
+    int InsertNewRecordAtIndex (String filename, int Key, int ByteOffset){return 0; }
+    void SearchRecordInIndex (String filename, int Key){}
+    void DisplayBinarySearchTreeInOrder (String FileName){}
+    void DisplayIndexFileContent (String filename){}
+
     public static void main (String args[]){
         String treeFile = "src/containers/tree,bin";
         CreateRecordsFile(treeFile,8);
