@@ -16,6 +16,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println();
     }
 
     static void CreateRecordsFile(String filename, int numberOfRecords) {
@@ -47,45 +48,33 @@ public class Main {
             int x = file.readInt();
             while (true)
             {
-                if (x<offset)
-                {
+                if (x<offset) {
                     file.readInt();
                     file.readInt();
-                    int leftLocation = (int)file.getFilePointer();
-                    int left = file.readInt();
-                    if (left==-1)
-                    {
-                        file.seek(leftLocation);
+                    int leftNodeByteOffset = (int) file.getFilePointer();
+                    int leftNodeValue = file.readInt();
+                    if (leftNodeValue == -1) {
+                        file.seek(leftNodeByteOffset);
                         file.writeInt(reference);
                         break;
-                    }
-                    else
-                    {
-                        System.out.println("leftLocation::"+left);
-
-                        file.seek(left*16);
-                        x=file.readInt();
+                    } else {
+                        file.seek(leftNodeValue * 16);
+                        x = file.readInt();
                     }
                 }
-                else
-                {
+                else {
                     file.readInt();
-                    int leftLocation = (int)file.getFilePointer();
-                    int left = file.readInt();
-                    if (left==-1)
-                    {
-                        file.seek(leftLocation);
+                    int rightNodeByteOffset = (int) file.getFilePointer();
+                    int rightNodeValue = file.readInt();
+                    if (rightNodeValue == -1) {
+                        file.seek(rightNodeByteOffset);
                         file.writeInt(reference);
                         break;
+                    } else {
+                        file.seek(rightNodeValue * 16);
+                        x = file.readInt();
                     }
-                    else
-                    {
-                        file.seek(left*16);
-                        x=file.readInt();
-                    }
-
                 }
-
             }
 
         } catch (IOException e) {
@@ -98,19 +87,14 @@ public class Main {
         try {
             RandomAccessFile treeIndexFile = new RandomAccessFile(filename, "rw");
             int freeRecordIndex = treeIndexFile.readInt();
-            treeIndexFile.seek(0);
-            if ((freeRecordIndex+1)==treeIndexFile.length()/16)
-            {
-                treeIndexFile.writeInt(-1);
-            }
-            else
-            {
-                treeIndexFile.writeInt(freeRecordIndex+1);
-            }
             if (freeRecordIndex != -1) {
-                if (freeRecordIndex==1)
-                {
-                    System.out.println("insertin  first record");
+                treeIndexFile.seek(0);
+                if ((freeRecordIndex + 1) == treeIndexFile.length() / 16)
+                    treeIndexFile.writeInt(-1);
+                else
+                    treeIndexFile.writeInt(freeRecordIndex + 1);
+
+                if (freeRecordIndex == 1) {
                     treeIndexFile.seek(0);
                     treeIndexFile.seek(16);
                     treeIndexFile.writeInt(Key);
@@ -118,21 +102,18 @@ public class Main {
                     treeIndexFile.writeInt(-1);
                     treeIndexFile.writeInt(-1);
                 }
-                else
-                {
-                    System.out.println("insertin non first record");
+                else {
                     /*seek to the proper place to insert any new record*/
-                    treeIndexFile.seek(freeRecordIndex*16);
+                    treeIndexFile.seek(freeRecordIndex * 16);
                     treeIndexFile.writeInt(Key);
                     treeIndexFile.writeInt(ByteOffset);
                     treeIndexFile.writeInt(-1);
                     treeIndexFile.writeInt(-1);
-                    handleReferences(treeIndexFile,Key,freeRecordIndex);
+                    handleReferences(treeIndexFile, Key, freeRecordIndex);
                 }
 
-            }else{
+            } else
                 System.out.println("can't insert to file");
-            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -153,16 +134,19 @@ public class Main {
     public static void main(String args[]) {
         String treeIndexFile = "src/containers/tree,bin";
         CreateRecordsFile(treeIndexFile, 8);
-      //  readFile(treeIndexFile);
-        InsertNewRecordAtIndex(treeIndexFile,5,12);
-        InsertNewRecordAtIndex(treeIndexFile,12,24);
-        InsertNewRecordAtIndex(treeIndexFile,3,36);
-        InsertNewRecordAtIndex(treeIndexFile,9,48);
-        InsertNewRecordAtIndex(treeIndexFile,8,60);
-        InsertNewRecordAtIndex(treeIndexFile,2,72);
-        InsertNewRecordAtIndex(treeIndexFile,4,84);
-
-
+        readFile(treeIndexFile);
+        InsertNewRecordAtIndex(treeIndexFile, 5, 12);
+        InsertNewRecordAtIndex(treeIndexFile, 12, 24);
+        InsertNewRecordAtIndex(treeIndexFile, 3, 36);
+        InsertNewRecordAtIndex(treeIndexFile, 9, 48);
+        InsertNewRecordAtIndex(treeIndexFile, 8, 60);
+        InsertNewRecordAtIndex(treeIndexFile, 2, 72);
+        InsertNewRecordAtIndex(treeIndexFile, 4, 84);
+        InsertNewRecordAtIndex(treeIndexFile, 4, 84);
+        InsertNewRecordAtIndex(treeIndexFile, 4, 84);
+        InsertNewRecordAtIndex(treeIndexFile, 4, 84);
+        InsertNewRecordAtIndex(treeIndexFile, 4, 84);
+        InsertNewRecordAtIndex(treeIndexFile, 4, 84);
 
 
         readFile(treeIndexFile);
