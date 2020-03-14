@@ -4,12 +4,14 @@ import java.io.RandomAccessFile;
 
 public class Main {
     static void readFile(String path) {
+
+        System.out.println("Reading the file");
         try {
             RandomAccessFile file = new RandomAccessFile(path, "rw");
             for (int i = 0; i < file.length() / 4; i++) {
                 if (i%4==0 && i !=0)
                     System.out.println();
-                System.out.print(" "+file.readInt());
+                System.out.print("----" + file.readInt());
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -18,6 +20,7 @@ public class Main {
         }
         System.out.println();
     }
+
 
     static void CreateRecordsFile(String filename, int numberOfRecords) {
         try {
