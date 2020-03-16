@@ -20,7 +20,6 @@ public class Main {
         System.out.println();
     }
 
-
     static void CreateRecordsFile(String filename, int numberOfRecords) {
         try {
             RandomAccessFile treeIndexFile = new RandomAccessFile(filename, "rw");
@@ -30,7 +29,6 @@ public class Main {
                 treeIndexFile.writeInt(0);
                 treeIndexFile.writeInt(0);
                 treeIndexFile.writeInt(0);
-
             }
             treeIndexFile.writeInt(-1);
             treeIndexFile.writeInt(0);
@@ -137,7 +135,6 @@ public class Main {
                     System.out.println("byte offset is" + file.readInt());
                     break;
                 } else if (key > k) {
-                    System.out.println("i am in right");
                     file.readInt();
                     file.readInt();
                     int right = file.readInt();
@@ -145,12 +142,10 @@ public class Main {
                         System.out.println("key does not exists");
                         break;
                     } else {
-                        System.out.println("right else");
                         file.seek(right * 16);
                     }
                 } else {
 
-                    System.out.println("i am in left");
                     file.readInt();
                     int left = file.readInt();
                     if (left == -1) {
@@ -161,14 +156,11 @@ public class Main {
                     }
                 }
             }
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
 
