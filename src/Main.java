@@ -4,14 +4,13 @@ import java.io.RandomAccessFile;
 
 public class Main {
     static void readFile(String path) {
-
         System.out.println("Reading the file");
         try {
             RandomAccessFile file = new RandomAccessFile(path, "rw");
             for (int i = 0; i < file.length() / 4; i++) {
                 if (i%4==0 && i !=0)
                     System.out.println();
-                System.out.print("----" + file.readInt());
+                System.out.print(" " + file.readInt());
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -125,13 +124,55 @@ public class Main {
 
         return 0;
     }
-    void SearchRecordInIndex(String filename, int Key) {
+
+    static void SearchRecordInIndex(String filename, int key) {
+
+        try {
+            RandomAccessFile file = new RandomAccessFile(filename, "r");
+            file.seek(16);
+            while (true) {
+                int k = file.readInt();
+                if (k == key) {
+                    System.out.println("key has been founded successfully");
+                    System.out.println("byte offset is" + file.readInt());
+                    break;
+                } else if (key > k) {
+                    System.out.println("i am in right");
+                    file.readInt();
+                    file.readInt();
+                    int right = file.readInt();
+                    if (right == -1) {
+                        System.out.println("key does not exists");
+                        break;
+                    } else {
+                        System.out.println("right else");
+                        file.seek(right * 16);
+                    }
+                } else {
+
+                    System.out.println("i am in left");
+                    file.readInt();
+                    int left = file.readInt();
+                    if (left == -1) {
+                        System.out.println("key does not exists");
+                        break;
+                    } else {
+                        file.seek(left * 16);
+                    }
+                }
+            }
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
+
 
     void DisplayBinarySearchTreeInOrder(String FileName) {
-    }
-
-    void DisplayIndexFileContent(String filename) {
     }
 
     public static void main(String args[]) {
@@ -153,6 +194,12 @@ public class Main {
 
 
         readFile(treeIndexFile);
+        SearchRecordInIndex(treeIndexFile, 5);
+
+
+    }
+
+    void DisplayIndexFileContent(String filename) {
 
     }
 }
